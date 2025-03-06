@@ -1,0 +1,51 @@
+{
+    "greetings": {
+        "inputs": ["hello", "hi", "sup", "hey", "how are you"],
+        "responses": [
+            "Hello! How are you doing?",
+            "Hey there! What's up?",
+            "Hi! Hope you're having a great day!",
+            "Hey! Nice to see you!"
+        ]
+    },
+    "wellbeing_positive": {
+        "inputs": ["i'm fine", "i am good", "i'm great"],
+        "responses": [
+            "That's great to hear!",
+            "Awesome! Keep up the good vibes!",
+            "Glad to know you're doing well!"
+        ]
+    },
+    "wellbeing_negative": {
+        "inputs": ["i'm not fine", "i feel bad", "i'm sad"],
+        "responses": [
+            "I'm sorry to hear that. Want to talk about it?",
+            "Oh no! I hope things get better soon.",
+            "Stay strong! Better days are coming."
+        ]
+    },
+    "about_chatbot": {
+        "inputs": ["who are you", "what are you"],
+        "responses": [
+            "I'm a simple chatbot here to chat with you!",
+            "Just your friendly chatbot assistant.",
+            "A virtual friend who loves talking!"
+        ]
+    },
+    "capabilities": {
+        "inputs": ["what can you do", "what do you do"],
+        "responses": [
+            "I can play games, tell stories, and chat with you.",
+            "I can have fun conversations, tell you a story, or play a game.",
+            "I entertain and keep you company!"
+        ]
+    },
+    "farewell": {
+        "inputs": ["bye", "goodbye", "see you later"],
+        "responses": [
+            "Goodbye! Have a great day!",
+            "See you next time!",
+            "Take care! Hope to chat again soon!"
+        ]
+    }
+}
