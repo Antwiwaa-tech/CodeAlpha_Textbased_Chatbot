@@ -37,25 +37,29 @@ def game():
     if not game_data:
         print("Game data unavailable. Exiting game mode.")
         return
+    try:
 
-    choices = ["rock", "paper", "scissors"]
-    
-    while True:
-        player_choice = get_response("\nRock, Paper, Scissors! (Type 'quit' to exit)\nChoose: rock, paper, or scissors:")
-
-        if player_choice == 'quit':
-            print("Exiting game mode...\n")
-            return
-        if player_choice not in choices:
-            print("Invalid choice! Please choose rock, paper, or scissors.")
-            continue
-
-        computer_choice = random.choice(choices)
-        result = next((r["result"] for r in game_data["rounds"] 
-                       if r["player"] == player_choice and r["computer"] == computer_choice), "Unknown")
+        choices = ["rock", "paper", "scissors"]
         
-        print(f"\nYou chose: {player_choice}\nChatbot chose: {computer_choice}")
-        print(f"Result: {result.capitalize()}!\n" if result != "Unknown" else "Something went wrong! No match found in JSON.")
+        while True:
+            player_choice = get_response("\nRock, Paper, Scissors! (Type 'quit' to exit)\nChoose: rock, paper, or scissors:")
+
+            if player_choice == 'quit':
+                print("Exiting game mode...\n")
+                return
+            if player_choice not in choices:
+                print("Invalid choice! Please choose rock, paper, or scissors.")
+                continue
+
+            computer_choice = random.choice(choices)
+            result = next((r["result"] for r in game_data["rounds"] 
+                        if r["player"] == player_choice and r["computer"] == computer_choice), "Unknown")
+            
+            print(f"\nYou chose: {player_choice}\nChatbot chose: {computer_choice}")
+            print(f"Result: {result.capitalize()}!\n" if result != "Unknown" else "Something went wrong! No match found in JSON.")
+    
+    except Exception as e:
+        print(f'Error occured at {e}')
 
 # Function to tell a story
 def story():
@@ -103,17 +107,19 @@ def talk():
             print(f"Error: {e}")
 
 # Main program loop
-while True:
-    action = get_response(">>")
-
-    if action == "gaming":
-        game()
-    elif action == "storytelling":
-        story()
-    elif action == "talk":
-        talk()
-    elif action == "quit":
-        print("Goodbye!")
-        break
-    else:
-        print("Invalid choice. Please select: gaming, storytelling, or quit.")
+try:
+    while True:
+        action = get_response(">>")
+        if action == "gaming":
+            game()
+        elif action == "storytelling":
+            story()
+        elif action == "talk":
+            talk()
+        elif action == "quit":
+            print("Goodbye!")
+            break
+        else:
+            print("Invalid choice. Please select: gaming, storytelling, or quit.")
+except Exception as e:
+    print("Existing program....")            
