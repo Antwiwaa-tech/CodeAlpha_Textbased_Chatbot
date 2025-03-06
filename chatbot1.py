@@ -20,6 +20,7 @@ def load_json(file_path):
 
 game_data = load_json("game.json")
 story_data = load_json("story.json")
+response_data = load_json("response.json")
 
 # Function to get user input
 def get_response(prompt):
@@ -66,21 +67,37 @@ def story():
     print(f"\nStory Time!!!\n{random_story['content']}\n")
 
 # Function to have a chat with OpenAI
-def talk(prompt):
+def talk():
+    
+    if not response_data:
+        print("Sorry, Unable to load response")
+        return
+    
     print("\nLet's chat! Type 'quit' to exit.\n")
     
     while True:
-        user_input = input(prompt)
+        user_input = input("You").strip().lower()
         
         if user_input.lower() == "quit":
             print("Exiting talk mode...\n")
             return
         
-        try:
+        found_responses = None
+        
+    #    Check if user input matches any known phrases"""
+         
+        for category in response_data.values():
+            if user_input in category["inputs"]:
+                found_responses = category["responses"]
+                break
             
-            print(f"Chatbot:Hello ")
-        except Exception as e:
-            print(f"Error: {e}\nCould not fetch response from OpenAI.")
+    # Print response:
+        if found_responses:
+            print(f"Chatbot: {random.choice(found_responses)}") #Pick a random response
+            
+        else:
+            print("Chatbot: Sorry, I can't proccess that")    
+       
             
 # Main program loop
 while True:
@@ -91,7 +108,7 @@ while True:
     elif action == "storytelling":
         story()
     elif action == "talk":
-        talk("You:")    
+        talk()    
     elif action == "quit":
         print("Goodbye!")
         break
