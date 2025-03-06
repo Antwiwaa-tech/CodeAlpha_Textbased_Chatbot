@@ -1,12 +1,7 @@
 import json
 import random
-import openai
-import os
 
 """A text-based chatbot to play games, tell stories, or have a life talk with the system"""
-
-# Set up OpenAI API key
-openai.api_key = os.getenv("OPENAI_API_KEY", "your-api-key")  # Replace with your actual API key
 
 # Load JSON files once at startup
 def load_json(file_path):
@@ -16,6 +11,9 @@ def load_json(file_path):
             return json.load(file)
     except FileNotFoundError:
         print(f"Error: {file_path} not found.")
+        return None
+    except json.JSONDecodeError:
+        print(f"Error: {file_path} contains invalid JSON.")
         return None
 
 game_data = load_json("game.json")
@@ -28,9 +26,11 @@ def get_response(prompt):
     return input(f"{prompt} ").strip().lower()
 
 # Greet the user
-print("Hello there, what's your name?")
+# Greet the user and introduce itself
+print("\U0001F44B Hello! I am Chatbot, your friendly AI companion. What's your name?")
 user_name = get_response(">>")
-print(f"Welcome, {user_name}! What would you like to do today? (gaming, storytelling, or talk?)")
+print(f"\nNice to meet you, {user_name}! I can play games, tell stories, or have a chat.")
+print("Just type what you want to do! You can say 'gaming', 'storytelling', or 'talk'. Type 'quit' anytime to exit.")
 
 # Function to play Rock, Paper, Scissors
 def game():
@@ -42,7 +42,7 @@ def game():
     
     while True:
         player_choice = get_response("\nRock, Paper, Scissors! (Type 'quit' to exit)\nChoose: rock, paper, or scissors:")
-        
+
         if player_choice == 'quit':
             print("Exiting game mode...\n")
             return
@@ -63,42 +63,45 @@ def story():
         print("Story data unavailable. Exiting storytelling mode.")
         return
 
-    random_story = random.choice(story_data["stories"])
-    print(f"\nStory Time!!!\n{random_story['content']}\n")
+    try:
+        random_story = random.choice(story_data["stories"])
+        print(f"\nStory Time!!!\n{random_story['content']}\n")
+    except (KeyError, IndexError, TypeError):
+        print("Error: Story data is missing or corrupted.")
 
-# Function to have a chat with OpenAI
+# Function for simple talks
 def talk():
-    
     if not response_data:
-        print("Sorry, Unable to load response")
+        print("Sorry, unable to load response data.")
         return
     
     print("\nLet's chat! Type 'quit' to exit.\n")
     
     while True:
-        user_input = input("You").strip().lower()
-        
-        if user_input.lower() == "quit":
-            print("Exiting talk mode...\n")
-            return
-        
-        found_responses = None
-        
-    #    Check if user input matches any known phrases"""
-         
-        for category in response_data.values():
-            if user_input in category["inputs"]:
-                found_responses = category["responses"]
-                break
-            
-    # Print response:
-        if found_responses:
-            print(f"Chatbot: {random.choice(found_responses)}") #Pick a random response
-            
-        else:
-            print("Chatbot: Sorry, I can't proccess that")    
-       
-            
+        try:
+            user_input = input("You: ").strip().lower()
+
+            if user_input == "quit":
+                print("Exiting talk mode...\n")
+                return
+
+            found_responses = None
+
+            # Check if user input matches any known phrases
+            for category in response_data.values():
+                if user_input in category["inputs"]:
+                    found_responses = category["responses"]
+                    break
+
+            # Print response:
+            if found_responses:
+                print(f"Chatbot: {random.choice(found_responses)}")  # Pick a random response
+            else:
+                print("Chatbot: Sorry, I can't process that.")
+
+        except Exception as e:
+            print(f"Error: {e}")
+
 # Main program loop
 while True:
     action = get_response(">>")
@@ -108,7 +111,7 @@ while True:
     elif action == "storytelling":
         story()
     elif action == "talk":
-        talk()    
+        talk()
     elif action == "quit":
         print("Goodbye!")
         break
