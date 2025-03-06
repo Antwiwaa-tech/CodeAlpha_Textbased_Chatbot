@@ -1,15 +1,16 @@
 {
     "greetings": {
-        "inputs": ["hello", "hi", "sup", "hey", "how are you"],
+        "inputs": ["hello", "hi", "sup", "hey", "how are you","Kudus","good morning","good evening", "good afternoon"],
         "responses": [
             "Hello! How are you doing?",
             "Hey there! What's up?",
             "Hi! Hope you're having a great day!",
-            "Hey! Nice to see you!"
+            "Hey! Nice to see you!",
+            "Good day, how do you do?"
         ]
     },
     "wellbeing_positive": {
-        "inputs": ["i'm fine", "i am good", "i'm great"],
+        "inputs": ["i'm fine", "i am good", "i'm great", "good"],
         "responses": [
             "That's great to hear!",
             "Awesome! Keep up the good vibes!",
@@ -17,11 +18,12 @@
         ]
     },
     "wellbeing_negative": {
-        "inputs": ["i'm not fine", "i feel bad", "i'm sad"],
+        "inputs": ["i'm not fine", "i feel bad", "i'm sad","bad","having a bad day"],
         "responses": [
             "I'm sorry to hear that. Want to talk about it?",
             "Oh no! I hope things get better soon.",
-            "Stay strong! Better days are coming."
+            "Stay strong! Better days are coming.",
+            "Would you like to share?"
         ]
     },
     "about_chatbot": {
