@@ -9,8 +9,16 @@
             "Good day, how do you do?"
         ]
     },
+    "chatbotwellbeing":{
+        "inputs":["How do you do?","How are you?", "Are you fine?","Wossop?"],
+        "responses":[
+            "I am good",
+            "I am fine",
+            "I'm fit"
+        ]
+    },
     "wellbeing_positive": {
-        "inputs": ["i'm fine", "i am good", "i'm great", "good"],
+        "inputs": ["i'm fine", "i am good", "i'm great", "good","I'm good"],
         "responses": [
             "That's great to hear!",
             "Awesome! Keep up the good vibes!",
