@@ -1,0 +1,15 @@
+{
+    "rounds": [
+        {"player": "rock", "computer": "rock", "result": "tie"},
+        {"player": "rock", "computer": "paper", "result": "lose"},
+        {"player": "rock", "computer": "scissors", "result": "win"},
+
+        {"player": "paper", "computer": "rock", "result": "win"},
+        {"player": "paper", "computer": "paper", "result": "tie"},
+        {"player": "paper", "computer": "scissors", "result": "lose"},
+
+        {"player": "scissors", "computer": "rock", "result": "lose"},
+        {"player": "scissors", "computer": "paper", "result": "win"},
+        {"player": "scissors", "computer": "scissors", "result": "tie"}
+    ]
+}
