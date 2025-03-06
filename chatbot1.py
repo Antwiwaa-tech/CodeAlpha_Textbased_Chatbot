@@ -1,80 +1,99 @@
 import json
 import random
-"""Woow"""
-"""A textbased chatbot to play games, tell stories, or have a life talk with the system"""
+import openai
+import os
 
-welcome_message = "Hello there, what's your name?"
-print(welcome_message)
-user_response = input('>> ')
+"""A text-based chatbot to play games, tell stories, or have a life talk with the system"""
 
+# Set up OpenAI API key
+openai.api_key = os.getenv("OPENAI_API_KEY", "your-api-key")  # Replace with your actual API key
+
+# Load JSON files once at startup
+def load_json(file_path):
+    """Load JSON data from a given file path."""
+    try:
+        with open(file_path, "r") as file:
+            return json.load(file)
+    except FileNotFoundError:
+        print(f"Error: {file_path} not found.")
+        return None
+
+game_data = load_json("game.json")
+story_data = load_json("story.json")
+
+# Function to get user input
 def get_response(prompt):
-    """To get user response dynamically"""
-    return input(f"{prompt}").lower()
+    """Get user input and return lowercase response."""
+    return input(f"{prompt} ").strip().lower()
 
-def greeting():
-    """Greet the user by name and ask what to do today"""
-    print(f'{user_response}, welcome! What would you like to do today?\nGaming, storytelling, or talk?')
-
-greeting()
-
-# Load game outcomes from JSON file
-def load_game_data():
-    with open("game.json", "r") as file:
-        return json.load(file)
+# Greet the user
+print("Hello there, what's your name?")
+user_name = get_response(">>")
+print(f"Welcome, {user_name}! What would you like to do today? (gaming, storytelling, or talk?)")
 
 # Function to play Rock, Paper, Scissors
 def game():
-    game_data = load_game_data()  # Load JSON data
+    if not game_data:
+        print("Game data unavailable. Exiting game mode.")
+        return
+
     choices = ["rock", "paper", "scissors"]
     
     while True:
-        # Get player input
-        player_choice = input("\nWelcome to Rock, Paper, Scissors! Type 'quit' to exit.\nChoose rock, paper, or scissors: ").lower()
+        player_choice = get_response("\nRock, Paper, Scissors! (Type 'quit' to exit)\nChoose: rock, paper, or scissors:")
         
         if player_choice == 'quit':
             print("Exiting game mode...\n")
-            break
-        elif player_choice not in choices:
+            return
+        if player_choice not in choices:
             print("Invalid choice! Please choose rock, paper, or scissors.")
             continue
 
-        # Computer randomly selects a move
         computer_choice = random.choice(choices)
+        result = next((r["result"] for r in game_data["rounds"] 
+                       if r["player"] == player_choice and r["computer"] == computer_choice), "Unknown")
+        
+        print(f"\nYou chose: {player_choice}\nChatbot chose: {computer_choice}")
+        print(f"Result: {result.capitalize()}!\n" if result != "Unknown" else "Something went wrong! No match found in JSON.")
 
-        # Look up the result from JSON file
-        result = None
-        for round in game_data["rounds"]:
-            if round["player"] == player_choice and round["computer"] == computer_choice:
-                result = round["result"]
-                break
-
-        # Print results based only on the JSON file
-        print(f"\nYou chose: {player_choice}")
-        print(f"Chatbot chose: {computer_choice}")
-
-        if result:
-            print(f"Result: {result.capitalize()}!\n")  # Displays Win, Lose, or Tie
-        else:
-            print("Something went wrong! No match found in JSON.")
-
-# Load story data
-def load_story_data():
-    with open("story.json", "r") as file:
-        return json.load(file)
-    
+# Function to tell a story
 def story():
-    story_data = load_story_data()
-    
-    # Choose a story randomly
+    if not story_data:
+        print("Story data unavailable. Exiting storytelling mode.")
+        return
+
     random_story = random.choice(story_data["stories"])
     print(f"\nStory Time!!!\n{random_story['content']}\n")
 
+# Function to have a chat with OpenAI
+def talk(prompt):
+    print("\nLet's chat! Type 'quit' to exit.\n")
+    
+    while True:
+        user_input = input(prompt)
+        
+        if user_input.lower() == "quit":
+            print("Exiting talk mode...\n")
+            return
+        
+        try:
+            
+            print(f"Chatbot:Hello ")
+        except Exception as e:
+            print(f"Error: {e}\nCould not fetch response from OpenAI.")
+            
+# Main program loop
 while True:
-    choice = get_response('>> ')
-    if choice == 'gaming':
+    action = get_response(">>")
+
+    if action == "gaming":
         game()
-    elif choice == 'storytelling':
+    elif action == "storytelling":
         story()
-    elif choice == 'quit':
+    elif action == "talk":
+        talk("You:")    
+    elif action == "quit":
         print("Goodbye!")
         break
+    else:
+        print("Invalid choice. Please select: gaming, storytelling, or quit.")
